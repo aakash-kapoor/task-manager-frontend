@@ -1,0 +1,146 @@
+// Trello-style color variables
+$trello-blue: #0079bf;
+$trello-nav-blue: #0067a3;
+$trello-card-blue: #005a8f;
+$text-light: #ffffff;
+$green-btn: #5aac44;
+$green-btn-hover: #519839;
+
+.navbar {
+  background-color: $trello-nav-blue;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: $text-light;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+
+  h1 {
+    margin: 0;
+    font-size: 1.25rem;
+    letter-spacing: 1px;
+  }
+
+  .logout-btn {
+    background-color: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 3px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+  }
+}
+
+.dashboard-container {
+  background-color: $trello-blue;
+  min-height: calc(100vh - 60px); // Subtract navbar height
+  padding: 2rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.workspace-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  color: $text-light;
+
+  h2 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+
+  .icon {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+.board-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  max-width: 1200px;
+}
+
+.board-card {
+  background-color: $trello-card-blue;
+  color: $text-light;
+  border-radius: 3px;
+  padding: 1rem;
+  height: 110px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-decoration: none;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+  transition: background-color 0.2s, transform 0.1s;
+  cursor: pointer;
+
+  h3 {
+    margin: 0;
+    font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .open-text {
+    font-size: 0.85rem;
+    opacity: 0; // Hidden by default
+    transition: opacity 0.2s;
+  }
+
+  &:hover {
+    background-color: lighten($trello-card-blue, 10%);
+    transform: translateY(-2px);
+    
+    .open-text {
+      opacity: 1; // Show on hover
+    }
+  }
+}
+
+.create-board-card {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  padding: 1rem;
+  height: 110px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .board-input {
+    padding: 0.5rem;
+    border: none;
+    border-radius: 3px;
+    font-size: 0.9rem;
+    outline: none;
+  }
+
+  .create-btn {
+    background-color: $green-btn;
+    color: white;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 3px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+
+    &:hover:not(:disabled) {
+      background-color: $green-btn-hover;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}

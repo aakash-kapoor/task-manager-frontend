@@ -7,7 +7,8 @@ import { AuthService } from '../../../core/services/auth.service';
   selector: 'app-login',
   standalone: true,
   imports: [ReactiveFormsModule],
-  templateUrl: './login.component.html'
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.scss' // Make sure it says .scss, not .css or .html!
 })
 export class LoginComponent {
   private fb = inject(FormBuilder);

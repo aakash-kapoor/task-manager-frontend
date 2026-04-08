@@ -1,1 +1,58 @@
-<p>board-detail works!</p>
+<div class="board-layout">
+  <header class="board-header">
+    <a routerLink="/dashboard" class="back-btn">&larr; Dashboard</a>
+    <h2>{{ board?.title || 'Loading Board...' }}</h2>
+  </header>
+
+  <div class="board-canvas" cdkDropListGroup>
+    
+    @for (list of board?.lists; track list.id) {
+      <div class="list-wrapper">
+        <div class="list-content">
+          <h3 class="list-title">{{ list.title }}</h3>
+          
+          <div class="list-cards" cdkDropList [cdkDropListData]="list.tasks" (cdkDropListDropped)="drop($event)">
+            @for (task of list.tasks; track task.id) {
+              <div class="card" cdkDrag>{{ task.title }}</div>
+            }
+          </div>
+          
+          @if (addingTaskToListId === list.id) {
+            <div class="add-task-form">
+              <input 
+                [(ngModel)]="newTaskTitle" 
+                (keyup.enter)="saveTask(list.id)"
+                (blur)="saveTask(list.id)"
+                autoFocus
+                placeholder="Enter a title for this card..." 
+                class="task-input"
+              >
+            </div>
+          } @else {
+            <div class="add-card-btn" (click)="addingTaskToListId = list.id">+ Add a card</div>
+          }
+        </div>
+      </div>
+    }
+
+    <div class="list-wrapper add-list-wrapper">
+      @if (isAddingList) {
+        <div class="add-list-form">
+          <input 
+            [(ngModel)]="newListTitle" 
+            (keyup.enter)="saveList()"
+            placeholder="Enter list title..." 
+            class="list-input"
+          >
+          <div class="form-actions">
+            <button (click)="saveList()" class="save-btn">Add List</button>
+            <button (click)="isAddingList = false" class="cancel-btn">&times;</button>
+          </div>
+        </div>
+      } @else {
+        <button class="add-list-btn" (click)="isAddingList = true">+ Add another list</button>
+      }
+    </div>
+
+  </div>
+</div>
