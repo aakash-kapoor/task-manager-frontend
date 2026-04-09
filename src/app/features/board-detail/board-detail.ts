@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { BoardService } from '../../core/services/board.service';
-
+import { LucideAngularModule, Plus, X, FileText, LayoutPanelLeft } from 'lucide-angular';
+import { NavBarComponent } from '../../shared/nav-bar/nav-bar.component';
 @Component({
   selector: 'app-board-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule, DragDropModule, FormsModule],
+  imports: [CommonModule, RouterModule, DragDropModule, FormsModule, LucideAngularModule, NavBarComponent],
   templateUrl: './board-detail.html',
   styleUrl: './board-detail.scss' // Make sure this says styleUrl!
 })
@@ -16,8 +17,12 @@ export class BoardDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private boardService = inject(BoardService);
   private cdr = inject(ChangeDetectorRef);
+  readonly PlusIcon = Plus;
+  readonly CloseIcon = X;
+  readonly FileTextIcon = FileText;
+  readonly CardIcon = LayoutPanelLeft;
   board: any;
-
+  selectedTask: any = null;
   // State for creating new lists/tasks
   isAddingList = false;
   newListTitle = '';
@@ -71,7 +76,7 @@ export class BoardDetailComponent implements OnInit {
   }
 
   // This function is triggered the moment you let go of the mouse click
-  drop(event: CdkDragDrop<any[]>) {
+ drop(event: CdkDragDrop<any[]>, targetList: any) {
     if (event.previousContainer === event.container) {
       // Reordering a task within the SAME list
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
@@ -83,7 +88,25 @@ export class BoardDetailComponent implements OnInit {
         event.previousIndex,
         event.currentIndex
       );
+      // Grab the specific task we just dropped
+      const movedTask = event.container.data[event.currentIndex];
+
+      // 3. Send the update to the NestJS Backend!
+      this.boardService.moveTask(movedTask.id, targetList.id, targetList.order).subscribe({
+        next: () => console.log('Task successfully moved in database!'),
+        error: (err) => {
+          console.error('Failed to move task', err);
+          // Optional: If the API fails, you could move the card back to its original list here to keep the UI in sync
+        }
+      });
     }
-    // Note: In a full app, you would also call an HTTP service here to save the new order to NestJS!
+  }
+
+  openTask(task: any) {
+    this.selectedTask = task;
+  }
+
+  closeModal() {
+    this.selectedTask = null;
   }
 }

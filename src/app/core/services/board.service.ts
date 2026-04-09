@@ -26,13 +26,20 @@ export class BoardService {
 
   // Create a new list inside a specific board
   createList(boardId: string, title: string) {
-    // Adjust this URL if your NestJS route is different (e.g., /lists)
     return this.http.post<any>(`${environment.apiUrl}/lists`, { boardId, title });
   }
 
   // Create a new task inside a specific list
   createTask(listId: string, title: string) {
-    // Adjust this URL if your NestJS route is different (e.g., /tasks)
-    return this.http.post<any>(`http://localhost:3000/lists/${listId}/tasks`, { title });
+    return this.http.post<any>(`${environment.apiUrl}/tasks`, { listId, title });
+  }
+
+  moveTask(taskId: string, newListId: string, newOrderId: number) {
+    // Adjust this URL to match your NestJS backend endpoint for updating a task!
+    // Often it looks like PATCH /tasks/:id
+    return this.http.patch<any>(`${environment.apiUrl}/tasks/${taskId}/move`, {
+      newListId: newListId,
+      newOrder: newOrderId
+    });
   }
 }

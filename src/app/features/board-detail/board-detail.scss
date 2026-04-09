@@ -1,203 +1,36 @@
-$trello-blue: #0079bf;
-$list-bg: #ebecf0;
-$card-bg: #ffffff;
-$text-dark: #172b4d;
-
-.board-layout {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  background-color: $trello-blue;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
-
-.board-header {
-  padding: 12px 16px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  background-color: rgba(0, 0, 0, 0.15); // Darken the top bar slightly
-  color: white;
-  
-  .back-btn {
-    color: white;
-    text-decoration: none;
-    background-color: rgba(255, 255, 255, 0.2);
-    padding: 6px 12px;
-    border-radius: 3px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    transition: background-color 0.2s;
-    
-    &:hover { background-color: rgba(255, 255, 255, 0.3); }
-  }
-  
-  h2 {
-    margin: 0;
-    font-size: 1.25rem;
-  }
-}
-
-.board-canvas {
-  flex-grow: 1;
-  display: flex;
-  align-items: flex-start;
-  padding: 12px 16px;
-  overflow-x: auto;
-  gap: 12px;
-}
-
-.list-wrapper {
-  width: 272px;
-  flex-shrink: 0;
-}
-
-.list-content {
-  background-color: $list-bg;
-  border-radius: 3px;
-  display: flex;
-  flex-direction: column;
-  max-height: 100%;
-  color: $text-dark;
-}
-
-.list-title {
-  padding: 10px 12px;
-  margin: 0;
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.list-cards {
-  flex: 1 1 auto;
-  overflow-y: auto;
-  min-height: 20px; // Ensures you can drag into an empty list!
-  padding: 0 8px;
-}
-
-.card {
-  background-color: $card-bg;
-  border-radius: 3px;
-  box-shadow: 0 1px 0 rgba(9, 30, 66, 0.25);
-  cursor: grab;
-  margin-bottom: 8px;
-  padding: 8px;
-  font-size: 14px;
-
-  &:hover { background-color: #f4f5f7; }
-  &:active { cursor: grabbing; }
-}
-
-/* Angular CDK Drag-and-Drop animation classes */
+/* --- The Card you are actively holding --- */
 .cdk-drag-preview {
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+  box-sizing: border-box;
   background-color: white;
-  padding: 8px;
-  border-radius: 3px;
-  font-family: sans-serif;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0,0,0,0.05);
+  font-family: 'Inter', sans-serif;
   font-size: 14px;
+  color: #1f2937;
+  
+  /* The classic Trello tilt! */
+  transform: rotate(4deg); 
+  cursor: grabbing !important;
 }
 
+/* --- The empty space showing where it will land --- */
 .cdk-drag-placeholder {
-  opacity: 0; // Hides the original card while dragging it
+  /* Trello's exact dark-mode-style empty slot */
+  background-color: rgba(9, 30, 66, 0.08); 
+  border: 1px dashed rgba(9, 30, 66, 0.2);
+  border-radius: 8px;
+  min-height: 45px; /* Ensures the slot never completely collapses */
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  color: transparent; /* Hides the text in the shadow copy */
 }
 
+/* --- Smooth sliding for the OTHER cards getting out of the way --- */
+.cdk-drop-list-dragging .cdk-drag {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+/* --- Smooth snapping when you let go of the mouse --- */
 .cdk-drag-animating {
-  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-}
-
-.list-cards.cdk-drop-list-dragging .card:not(.cdk-drag-placeholder) {
-  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-}
-
-/* Add Buttons */
-.add-card-btn, .add-list-btn {
-  padding: 8px 12px;
-  color: #5e6c84;
-  cursor: pointer;
-  font-size: 14px;
-  border-radius: 3px;
-  
-  &:hover { background-color: rgba(9, 30, 66, 0.08); color: $text-dark; }
-}
-
-.add-list-wrapper .add-list-btn {
-  width: 100%;
-  text-align: left;
-  background-color: rgba(255, 255, 255, 0.24);
-  color: white;
-  
-  &:hover { background-color: rgba(255, 255, 255, 0.32); }
-}
-
-// Add List Form
-.add-list-form {
-  background-color: $list-bg; // Uses the grey from earlier
-  border-radius: 3px;
-  padding: 8px;
-}
-
-.list-input {
-  width: 100%;
-  padding: 8px 12px;
-  margin-bottom: 8px;
-  border: 2px solid transparent;
-  border-radius: 3px;
-  font-size: 14px;
-  outline: none;
-  box-sizing: border-box;
-  transition: border-color 0.2s;
-
-  &:focus {
-    border-color: $trello-blue;
-  }
-}
-
-// Action Buttons (Save/Cancel)
-.form-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.save-btn {
-  background-color: $trello-blue;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 3px;
-  font-weight: 600;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.2s;
-
-  &:hover { background-color: darken($trello-blue, 10%); }
-}
-
-.cancel-btn {
-  background-color: transparent;
-  border: none;
-  color: #6b778c;
-  font-size: 24px;
-  cursor: pointer;
-  line-height: 1;
-  padding: 0 4px;
-
-  &:hover { color: $text-dark; }
-}
-
-// Add Task Form
-.add-task-form {
-  padding: 0 8px 8px 8px;
-}
-
-.task-input {
-  width: 100%;
-  padding: 8px;
-  border: none;
-  border-radius: 3px;
-  box-shadow: 0 1px 0 rgba(9, 30, 66, 0.25);
-  font-size: 14px;
-  outline: none;
-  box-sizing: border-box;
+  transition: transform 300ms cubic-bezier(0, 0, 0.2, 1);
 }

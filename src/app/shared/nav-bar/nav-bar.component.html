@@ -1,0 +1,20 @@
+<nav class="bg-white px-6 py-3 flex justify-between items-center border-b border-gray-200 shadow-sm z-50 relative">
+  
+  <a routerLink="/dashboard" class="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer no-underline text-trello-blue">
+    <lucide-icon [img]="KanbanIcon" class="w-6 h-6"></lucide-icon>
+    <h1 class="text-xl font-bold tracking-wide m-0">Trello Clone</h1>
+  </a>
+
+  <div class="flex items-center gap-4">
+    @if (currentPage() === 'dashboard') {
+      <a routerLink="/profile" class="flex items-center gap-2 px-3 py-1.5 rounded bg-blue-50 hover:bg-blue-100 text-trello-blue transition-colors font-medium text-sm no-underline">
+        <lucide-icon [img]="UserIcon" class="w-4 h-4"></lucide-icon>
+        Profile
+      </a>
+    }
+    <button (click)="logout()" class="flex items-center gap-2 px-3 py-1.5 border border-gray-300 rounded hover:bg-gray-100 text-gray-700 bg-white transition-all font-medium text-sm cursor-pointer">
+      <lucide-icon [img]="LogOutIcon" class="w-4 h-4"></lucide-icon>
+      Log Out
+    </button>
+  </div>
+</nav>

@@ -4,11 +4,13 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { BoardService } from '../../core/services/board.service';
 import { AuthService } from '../../core/services/auth.service';
+import { NavBarComponent } from '../../shared/nav-bar/nav-bar.component';
+import { LucideAngularModule, Plus, Kanban } from 'lucide-angular';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, NavBarComponent, LucideAngularModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'
 })
@@ -16,6 +18,8 @@ export class DashboardComponent implements OnInit {
   private boardService = inject(BoardService);
   private authService = inject(AuthService);
   private cdr = inject(ChangeDetectorRef);
+  readonly PlusIcon = Plus;
+  readonly KanbanIcon = Kanban;
   boards: any[] = [];
   newBoardTitle = '';
 
@@ -41,6 +45,7 @@ export class DashboardComponent implements OnInit {
         this.boards.push(newBoard); // Add it to the UI immediately
         console.log('this.boards :', this.boards);
         this.newBoardTitle = '';    // Clear the input
+        this.cdr.detectChanges();   // Update the UI
       },
       error: (err) => console.error('Failed to create board', err)
     });

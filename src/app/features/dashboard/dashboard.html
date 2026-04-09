@@ -1,37 +1,47 @@
-<nav class="navbar">
-  <h1>Trello Clone</h1>
-  <button (click)="logout()" class="logout-btn">Log Out</button>
-</nav>
+<app-nav-bar [currentPage]="'dashboard'"></app-nav-bar>
 
-<div class="dashboard-container">
-  <div class="workspace-header">
-    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-    <h2>Your Workspaces</h2>
-  </div>
-
-  <div class="board-grid">
+<div class="max-w-7xl mx-auto px-6 py-10">
+  
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
+    <div>
+      <h2 class="text-2xl font-bold text-gray-800 m-0">Your Workspaces</h2>
+      <p class="text-gray-500 mt-1 text-sm">Manage your boards and projects</p>
+    </div>
     
-    @for (board of boards; track board.id) {
-      <a [routerLink]="['/board', board.id]" class="board-card">
-        <h3>{{ board.title }}</h3>
-        <span class="open-text">Open board &rarr;</span>
-      </a>
-    }
-
-    <div class="create-board-card">
+    <div class="flex w-full md:w-auto gap-2">
       <input 
         [(ngModel)]="newBoardTitle" 
         (keyup.enter)="createBoard()"
         placeholder="New board title..." 
-        class="board-input"
+        class="flex-grow md:w-64 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-trello-blue focus:border-transparent transition-all"
       >
-      <button 
-        (click)="createBoard()" 
-        [disabled]="!newBoardTitle.trim()"
-        class="create-btn">
-        Create Board
+      <button (click)="createBoard()" class="flex items-center gap-1 bg-trello-blue hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium shadow-sm transition-colors">
+        <lucide-icon [img]="PlusIcon" class="w-4 h-4"></lucide-icon>
+        Create
       </button>
     </div>
-
   </div>
+
+  @if (boards.length > 0) {
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      @for (board of boards; track board.id) {
+        <a [routerLink]="['/board', board.id]" 
+           class="group block h-32 bg-white rounded-xl shadow-sm hover:shadow-md border border-gray-200 p-5 no-underline transition-all hover:-translate-y-1 relative overflow-hidden">
+          
+          <div class="absolute top-0 left-0 w-full h-1 bg-trello-blue opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          
+          <h3 class="text-lg font-semibold text-gray-800 m-0 group-hover:text-trello-blue transition-colors">{{ board.title }}</h3>
+          <p class="text-xs text-gray-400 mt-2">Created {{ board.createdAt | date:'mediumDate' }}</p>
+        </a>
+      }
+    </div>
+  } @else {
+    <div class="flex flex-col items-center justify-center py-20 bg-white rounded-xl border border-dashed border-gray-300">
+      <div class="w-16 h-16 bg-blue-50 text-trello-blue rounded-full flex items-center justify-center mb-4">
+        <lucide-icon [img]="KanbanIcon" class="w-8 h-8"></lucide-icon>
+      </div>
+      <h3 class="text-lg font-medium text-gray-800">No boards yet</h3>
+      <p class="text-gray-500 mt-1 mb-4 text-center max-w-sm">Create your first board above to start tracking your tasks, lists, and projects.</p>
+    </div>
+  }
 </div>

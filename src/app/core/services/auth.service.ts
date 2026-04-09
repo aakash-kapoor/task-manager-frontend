@@ -34,4 +34,9 @@ export class AuthService {
   getToken() {
     return localStorage.getItem('access_token');
   }
+
+  getProfile() {
+    // Note: Adjust the URL if your NestJS route is something else like '/users/me'
+    return this.http.get<any>(`${this.apiUrl}/me`); 
+  }
 }

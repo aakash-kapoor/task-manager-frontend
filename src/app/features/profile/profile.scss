@@ -1,0 +1,36 @@
+$trello-blue: #0079bf;
+$text-dark: #172b4d;
+
+.profile-container {
+  min-height: calc(100vh - 60px); background-color: #f4f5f7;
+  display: flex; justify-content: center; padding-top: 3rem;
+  font-family: sans-serif;
+}
+
+.profile-card {
+  background: white; width: 100%; max-width: 500px;
+  border-radius: 3px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  padding: 2rem; text-align: center; color: $text-dark;
+  
+  .avatar {
+    width: 80px; height: 80px; background-color: $trello-blue; color: white;
+    font-size: 32px; font-weight: bold; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1rem;
+  }
+  
+  h2 { margin: 0 0 0.5rem; font-size: 24px; }
+  .email { color: #5e6c84; margin-bottom: 2rem; }
+}
+
+.settings-section {
+  text-align: left; border-top: 1px solid #dfe1e6; padding-top: 1.5rem;
+  
+  h3 { font-size: 16px; margin-bottom: 1rem; }
+  
+  .setting-item {
+    margin-bottom: 1rem;
+    label { display: block; font-size: 12px; font-weight: bold; color: #5e6c84; margin-bottom: 4px; }
+    input { width: 100%; padding: 8px; border: 1px solid #dfe1e6; border-radius: 3px; background-color: #fafbfc; color: #a5adba; box-sizing: border-box; }
+  }
+}
