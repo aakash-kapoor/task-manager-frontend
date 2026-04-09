@@ -28,6 +28,12 @@ export class BoardDetailComponent implements OnInit {
   newListTitle = '';
   addingTaskToListId: string | null = null;
   newTaskTitle = '';
+
+  selectedListName: string = '';
+  isEditingTitle = false;
+  isEditingDescription = false;
+  editTaskTitle = '';
+  editTaskDescription = '';
   ngOnInit() {
     this.loadBoard();
   }
@@ -102,11 +108,52 @@ export class BoardDetailComponent implements OnInit {
     }
   }
 
-  openTask(task: any) {
+  openTask(task: any, listName: string) {
     this.selectedTask = task;
+    this.selectedListName = listName;
+    this.editTaskTitle = task.title;
+    this.editTaskDescription = task.description || ''; // Fallback to empty string if null
+    this.isEditingTitle = false; // Reset the title toggle
+    this.isEditingDescription = false;
+  }
+
+  saveTaskDetails() {
+    const payload = {
+      title: this.editTaskTitle,
+      description: this.editTaskDescription
+    };
+
+    this.boardService.updateTask(this.selectedTask.id, payload).subscribe({
+      next: (updatedTask) => {
+        // Update the modal's view
+        this.selectedTask.title = payload.title;
+        this.selectedTask.description = payload.description;
+        this.isEditingTitle = false;
+        this.isEditingDescription = false;
+        this.cdr.detectChanges(); // Update the modal with new details
+        // Update the card on the actual board canvas so it doesn't revert on close
+        const list = this.board.lists.find((l: any) => l.title === this.selectedListName);
+        if (list) {
+          const taskIndex = list.tasks.findIndex((t: any) => t.id === this.selectedTask.id);
+          if (taskIndex > -1) {
+            list.tasks[taskIndex].title = payload.title;
+            list.tasks[taskIndex].description = payload.description;
+          }
+        }
+      },
+      error: (err) => console.error('Failed to save task details', err)
+    });
   }
 
   closeModal() {
     this.selectedTask = null;
+    this.selectedListName = '';
+  }
+
+  cancelEdit() {
+    this.isEditingTitle = false;
+    this.isEditingDescription = false;
+    this.editTaskTitle = this.selectedTask?.title || '';
+    this.editTaskDescription = this.selectedTask?.description || '';
   }
 }

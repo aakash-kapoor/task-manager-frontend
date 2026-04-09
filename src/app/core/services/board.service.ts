@@ -35,11 +35,13 @@ export class BoardService {
   }
 
   moveTask(taskId: string, newListId: string, newOrderId: number) {
-    // Adjust this URL to match your NestJS backend endpoint for updating a task!
-    // Often it looks like PATCH /tasks/:id
     return this.http.patch<any>(`${environment.apiUrl}/tasks/${taskId}/move`, {
       newListId: newListId,
       newOrder: newOrderId
     });
+  }
+
+  updateTask(taskId: string, updates: { title?: string; description?: string }) {
+    return this.http.patch<any>(`${environment.apiUrl}/tasks/${taskId}`, updates);
   }
 }
